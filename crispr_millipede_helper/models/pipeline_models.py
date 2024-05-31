@@ -4,8 +4,8 @@ import pandas as pd
 
 @dataclass
 class IndexPairPipelineBean:
-    barcode_index: str
-    i5_index: str
+    index2: str
+    index1: str
     read1_fn: str
     read2_fn: Optional[str]
         

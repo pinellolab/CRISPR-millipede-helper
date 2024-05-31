@@ -51,14 +51,14 @@ def retrieve_sample_result_model_list(input_i5ToBarcodeToSampleInfoVarsMap,input
     sample_result_model_list: List[SampleResultModel] = []
     for index in range(0, total_count_result):
         index_pair_pipeline_bean = IndexPairPipelineBean(
-                barcode_index =  output_screen_countResults_map_processed[screen_id][index][0][0]["barcodeIndex"],
-                i5_index =  output_screen_countResults_map_processed[screen_id][index][0][0]["i5Index"],
+                index1 =  output_screen_countResults_map_processed[screen_id][index][0][0]["index1"],
+                index2 =  output_screen_countResults_map_processed[screen_id][index][0][0]["index2"],
                 read1_fn =  output_screen_countResults_map_processed[screen_id][index][0][0]["read1"],
                 read2_fn =  output_screen_countResults_map_processed[screen_id][index][0][0]["read2"]
             )
         
         sample_annotation_pipeline_bean = SampleAnnotationPipelineBean(
-            sample_annotations_series = pd.Series(input_i5ToBarcodeToSampleInfoVarsMap_processed[index_pair_pipeline_bean.i5_index][index_pair_pipeline_bean.barcode_index], index=input_sampleInfoVarnames_processed)
+            sample_annotations_series = pd.Series(input_i5ToBarcodeToSampleInfoVarsMap_processed[index_pair_pipeline_bean.index1][index_pair_pipeline_bean.index2], index=input_sampleInfoVarnames_processed)
         )
         
         count_result_output_pipeline_bean = None
@@ -111,14 +111,14 @@ def retrieve_demultiplex_sample_result_model_list(input_i5ToBarcodeToSampleInfoV
     sample_result_model_list: List[SampleResultModel] = []
     for index in range(0, total_count_result):
         index_pair_pipeline_bean = IndexPairPipelineBean(
-                barcode_index =  output_screenIdToSampleMap_processed[screen_id][index][0]["barcodeIndex"],
-                i5_index =  output_screenIdToSampleMap_processed[screen_id][index][0]["i5Index"],
+                index1 =  output_screenIdToSampleMap_processed[screen_id][index][0]["index1"],
+                index2 =  output_screenIdToSampleMap_processed[screen_id][index][0]["index2"],
                 read1_fn =  output_screenIdToSampleMap_processed[screen_id][index][0]["read1"],
                 read2_fn =  output_screenIdToSampleMap_processed[screen_id][index][0]["read2"]
             )
         
         sample_annotation_pipeline_bean = SampleAnnotationPipelineBean(
-            sample_annotations_series = pd.Series(input_i5ToBarcodeToSampleInfoVarsMap_processed[index_pair_pipeline_bean.i5_index][index_pair_pipeline_bean.barcode_index], index=input_sampleInfoVarnames_processed)
+            sample_annotations_series = pd.Series(input_i5ToBarcodeToSampleInfoVarsMap_processed[index_pair_pipeline_bean.index1][index_pair_pipeline_bean.index2], index=input_sampleInfoVarnames_processed)
         )
         
         sample_result_model = SampleResultModel(
