@@ -205,3 +205,34 @@ def localize_sample_files(samples_json_selected: List[Dict], localized_dir ="") 
             samples_json_selected_local.append(samples_json_selected_item_local)
         
     return samples_json_selected_local
+
+
+def retrieve_demultiplex_particpant_sample_result_model_list(input_i5ToBarcodeToSampleInfoVarsMap,input_sampleInfoVarnames, output_screenIdToSampleMap, screen_id) -> List[SampleResultModel]:
+    
+    input_i5ToBarcodeToSampleInfoVarsMap_processed = process_pipeline_element(input_i5ToBarcodeToSampleInfoVarsMap)
+    input_sampleInfoVarnames_processed = process_pipeline_element(input_sampleInfoVarnames)
+    output_screenIdToSampleMap_processed = process_pipeline_element(output_screenIdToSampleMap)
+    
+    total_count_result: int = len(output_screenIdToSampleMap_processed[screen_id])
+    
+    sample_result_model_list: List[SampleResultModel] = []
+    for index in range(0, total_count_result):
+        index_pair_pipeline_bean = IndexPairPipelineBean(
+                index1 =  output_screenIdToSampleMap_processed[screen_id][index][0]["index1"],
+                index2 =  output_screenIdToSampleMap_processed[screen_id][index][0]["index2"],
+                read1_fn =  output_screenIdToSampleMap_processed[screen_id][index][0]["read1"],
+                read2_fn =  output_screenIdToSampleMap_processed[screen_id][index][0]["read2"]
+            )
+
+        sample_annotation_pipeline_bean = SampleAnnotationPipelineBean(
+            sample_annotations_series = pd.Series(input_i5ToBarcodeToSampleInfoVarsMap_processed[index_pair_pipeline_bean.index1][index_pair_pipeline_bean.index2], index=input_sampleInfoVarnames_processed)
+        )
+
+        sample_result_model = SampleResultModel(
+            index_pair_pipeline_bean = index_pair_pipeline_bean,
+            sample_annotation_pipeline_bean = sample_annotation_pipeline_bean
+        )
+        
+        sample_result_model_list.append(sample_result_model)
+        
+    return sample_result_model_list   
