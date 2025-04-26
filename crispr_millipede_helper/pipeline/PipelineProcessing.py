@@ -45,7 +45,9 @@ def process_pipeline_element(pipeline_element):
 """
 def retrieve_demultiplex_sample_result_model_list(samples_json_selected_local: List[Dict],
     index2_attribute_name="index2",
+    index2_attribute_name_backup="barcode_index",
     index1_attribute_name="index1",
+    index1_attribute_name_backup="i5_index",
     read1_fn_attribute_name="read1_fn",
     read2_fn_attribute_name="read2_fn",
     output_count_result_attribute_name="output_count_result",
@@ -69,9 +71,19 @@ def retrieve_demultiplex_sample_result_model_list(samples_json_selected_local: L
     sample_result_model_list = []
     for samples_json_selected_local_item in samples_json_selected_local:
         # TODO: Need to store associated sample and participant entity information (i.e. their IDs)
+        try:
+            index1 = samples_json_selected_local_item["attributes"][index1_attribute_name]
+        except KeyError as e:
+            index1 = samples_json_selected_local_item["attributes"][index1_attribute_name_backup]
+
+        try:
+            index2 = samples_json_selected_local_item["attributes"][index2_attribute_name]
+        except KeyError as e:
+            index2 = samples_json_selected_local_item["attributes"][index2_attribute_name_backup]
+            
         index_pair_pipeline_bean = IndexPairPipelineBean(
-                index2 = samples_json_selected_local_item["attributes"][index2_attribute_name],
-                index1 = samples_json_selected_local_item["attributes"][index1_attribute_name],
+                index2 = index2,
+                index1 = index1,
                 read1_fn = samples_json_selected_local_item["attributes"][read1_fn_attribute_name],
                 read2_fn = samples_json_selected_local_item["attributes"][read2_fn_attribute_name]
             )
