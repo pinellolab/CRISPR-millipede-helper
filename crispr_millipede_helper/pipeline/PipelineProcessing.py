@@ -54,6 +54,7 @@ def retrieve_demultiplex_sample_result_model_list(samples_json_selected_local: L
     output_editing_efficiency_dict_attribute_name="output_editing_efficiency_dict",
     output_supplementary_files_dict_attribute_name="output_supplementary_files_dict",
     screen_id_attribute_name="SAMPLE_METADATA_screen",
+    screen_id_attribute_name_backup="SAMPLE_METADATA_SCREEN",
     protospacer_editing_efficiency_attribute_name="protospacer_editing_efficiency",
     surrogate_editing_efficiency_attribute_name="surrogate_editing_efficiency",
     barcode_editing_efficiency_attribute_name="barcode_editing_efficiency",
@@ -100,6 +101,11 @@ def retrieve_demultiplex_sample_result_model_list(samples_json_selected_local: L
         output_screen_editingEfficiencies = samples_json_selected_local_item["attributes"].get(output_editing_efficiency_dict_attribute_name, None)
         output_screen_supplementaryFiles = samples_json_selected_local_item["attributes"].get(output_supplementary_files_dict_attribute_name, None)
         if (output_screen_countResults is not None) and (output_screen_editingEfficiencies is not None) and (output_screen_supplementaryFiles is not None):
+            try:
+                screen_id = samples_json_selected_local_item["attributes"][screen_id_attribute_name]
+            except KeyError as e:
+                screen_id = samples_json_selected_local_item["attributes"][screen_id_attribute_name_backup]
+
             count_result_output_pipeline_bean = CountResultOutputPipelineBean(
                 count_result_fn =  output_screen_countResults,
                 screen_id = samples_json_selected_local_item["attributes"][screen_id_attribute_name],
